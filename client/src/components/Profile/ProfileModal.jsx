@@ -65,10 +65,10 @@ export default function ProfileModal({ isOpen, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in">
-      <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in transition-colors">
+      <div className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden">
         {/* Header */}
-        <div className="bg-slate-900 text-white px-6 py-5 flex items-center justify-between">
+        <div className="bg-slate-900 dark:bg-slate-950 text-white px-6 py-5 flex items-center justify-between border-b border-slate-800">
           <div className="flex items-center space-x-2.5">
             <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
               <User className="w-5 h-5" />
@@ -89,8 +89,8 @@ export default function ProfileModal({ isOpen, onClose }) {
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4 text-left">
           {success && (
-            <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold rounded-2xl flex items-center space-x-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <div className="p-3 bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs font-bold rounded-2xl flex items-center space-x-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
               <span>Cập nhật hồ sơ thành công! Đang đồng bộ dữ liệu...</span>
             </div>
           )}
@@ -98,7 +98,7 @@ export default function ProfileModal({ isOpen, onClose }) {
           {/* Gender & Age */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                 Giới tính
               </label>
               <div className="flex space-x-2">
@@ -107,8 +107,8 @@ export default function ProfileModal({ isOpen, onClose }) {
                   onClick={() => setFormData({ ...formData, gender: 'male' })}
                   className={`flex-1 py-2 rounded-xl text-xs font-bold border transition cursor-pointer ${
                     formData.gender === 'male'
-                      ? 'bg-emerald-50 border-emerald-500 text-emerald-800'
-                      : 'border-slate-200 text-slate-600'
+                      ? 'bg-emerald-50 dark:bg-emerald-950 border-emerald-500 text-emerald-800 dark:text-emerald-300'
+                      : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
                   }`}
                 >
                   Nam ♂
@@ -118,8 +118,8 @@ export default function ProfileModal({ isOpen, onClose }) {
                   onClick={() => setFormData({ ...formData, gender: 'female' })}
                   className={`flex-1 py-2 rounded-xl text-xs font-bold border transition cursor-pointer ${
                     formData.gender === 'female'
-                      ? 'bg-emerald-50 border-emerald-500 text-emerald-800'
-                      : 'border-slate-200 text-slate-600'
+                      ? 'bg-emerald-50 dark:bg-emerald-950 border-emerald-500 text-emerald-800 dark:text-emerald-300'
+                      : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
                   }`}
                 >
                   Nữ ♀
@@ -128,7 +128,7 @@ export default function ProfileModal({ isOpen, onClose }) {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                 Tuổi
               </label>
               <input
@@ -138,7 +138,7 @@ export default function ProfileModal({ isOpen, onClose }) {
                 required
                 value={formData.age}
                 onChange={(e) => setFormData({ ...formData, age: e.target.value })}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
           </div>
@@ -146,7 +146,7 @@ export default function ProfileModal({ isOpen, onClose }) {
           {/* Height, Weight, Target Weight */}
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                 Chiều cao (cm)
               </label>
               <input
@@ -157,12 +157,12 @@ export default function ProfileModal({ isOpen, onClose }) {
                 required
                 value={formData.height}
                 onChange={(e) => setFormData({ ...formData, height: e.target.value })}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                 Cân nặng (kg)
               </label>
               <input
@@ -173,12 +173,12 @@ export default function ProfileModal({ isOpen, onClose }) {
                 required
                 value={formData.weight}
                 onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                 Mục tiêu (kg)
               </label>
               <input
@@ -189,20 +189,20 @@ export default function ProfileModal({ isOpen, onClose }) {
                 required
                 value={formData.target_weight}
                 onChange={(e) => setFormData({ ...formData, target_weight: e.target.value })}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
           </div>
 
           {/* Activity Level */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
               Mức độ vận động
             </label>
             <select
               value={formData.activity_level}
               onChange={(e) => setFormData({ ...formData, activity_level: e.target.value })}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500"
             >
               <option value="sedentary">Ít vận động (văn phòng) [x1.2]</option>
               <option value="light">Vận động nhẹ (1-3 ngày/tuần) [x1.375]</option>
@@ -214,13 +214,13 @@ export default function ProfileModal({ isOpen, onClose }) {
 
           {/* Goal */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
               Mục tiêu thể chất
             </label>
             <select
               value={formData.goal}
               onChange={(e) => setFormData({ ...formData, goal: e.target.value })}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500"
             >
               <option value="lose_fast">Giảm cân nhanh (-500 kcal/ngày)</option>
               <option value="lose_normal">Giảm cân an toàn (-300 kcal/ngày)</option>
@@ -232,7 +232,7 @@ export default function ProfileModal({ isOpen, onClose }) {
 
           {/* Custom calorie override */}
           <div>
-            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
               Tùy chỉnh mức calo mục tiêu (để trống nếu muốn hệ thống tự tính)
             </label>
             <input
@@ -240,7 +240,7 @@ export default function ProfileModal({ isOpen, onClose }) {
               placeholder="Để trống để tự tính tự động"
               value={formData.custom_calorie_target}
               onChange={(e) => setFormData({ ...formData, custom_calorie_target: e.target.value })}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 placeholder-slate-400 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
           </div>
 
@@ -249,7 +249,7 @@ export default function ProfileModal({ isOpen, onClose }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 border border-slate-200 text-slate-700 font-bold rounded-2xl hover:bg-slate-50 text-xs cursor-pointer"
+              className="flex-1 py-3 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800 text-xs cursor-pointer"
             >
               Đóng
             </button>
@@ -266,4 +266,3 @@ export default function ProfileModal({ isOpen, onClose }) {
     </div>
   );
 }
-

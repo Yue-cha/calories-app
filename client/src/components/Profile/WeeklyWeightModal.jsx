@@ -52,9 +52,9 @@ export default function WeeklyWeightModal({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
+      <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden transition-colors">
         {/* Header with Weekly Accent */}
-        <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 px-6 py-6 text-white text-left relative">
+        <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 dark:from-emerald-800 dark:via-teal-800 dark:to-emerald-900 px-6 py-6 text-white text-left relative">
           <div className="flex items-center space-x-2 text-xs font-bold text-emerald-100 uppercase tracking-wider mb-2">
             <Calendar className="w-4 h-4 text-amber-300" />
             <span>Đầu Tuần Mới (Sau 00:00 Thứ Hai)</span>
@@ -73,45 +73,45 @@ export default function WeeklyWeightModal({ isOpen, onClose }) {
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-5 text-left">
           {error && (
-            <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold rounded-2xl flex items-center space-x-2">
+            <div className="p-3 bg-rose-50 dark:bg-rose-950/80 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs font-semibold rounded-2xl flex items-center space-x-2">
               <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
           {successMsg && (
-            <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold rounded-2xl flex items-center space-x-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <div className="p-3 bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs font-bold rounded-2xl flex items-center space-x-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
               <span>{successMsg}</span>
             </div>
           )}
 
           {/* Previous vs Current Weight comparison card */}
-          <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 flex items-center justify-between">
+          <div className="bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 rounded-2xl p-4 flex items-center justify-between">
             <div>
-              <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">
+              <span className="text-[11px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">
                 Cân nặng tuần trước
               </span>
-              <div className="text-xl font-bold text-slate-700">{previousWeight} kg</div>
+              <div className="text-xl font-bold text-slate-700 dark:text-slate-200">{previousWeight} kg</div>
             </div>
 
             <div className="text-right">
-              <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">
+              <span className="text-[11px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">
                 Chênh lệch
               </span>
               <div className="flex items-center space-x-1 justify-end">
                 {diff > 0 && (
-                  <span className="text-xs font-extrabold text-amber-600 flex items-center">
+                  <span className="text-xs font-extrabold text-amber-600 dark:text-amber-400 flex items-center">
                     <TrendingUp className="w-3.5 h-3.5 mr-0.5" /> +{diff} kg
                   </span>
                 )}
                 {diff < 0 && (
-                  <span className="text-xs font-extrabold text-emerald-600 flex items-center">
+                  <span className="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 flex items-center">
                     <TrendingDown className="w-3.5 h-3.5 mr-0.5" /> {diff} kg
                   </span>
                 )}
                 {diff === 0 && (
-                  <span className="text-xs font-bold text-slate-500 flex items-center">
+                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400 flex items-center">
                     <Minus className="w-3.5 h-3.5 mr-0.5" /> 0 kg
                   </span>
                 )}
@@ -121,12 +121,12 @@ export default function WeeklyWeightModal({ isOpen, onClose }) {
 
           {/* Main Input: Only Weight (kg) */}
           <div>
-            <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">
+            <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-2">
               Nhập cân nặng hiện tại của bạn (kg) *
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                <Scale className="w-5 h-5 text-emerald-600" />
+                <Scale className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
               </div>
               <input
                 type="number"
@@ -138,13 +138,13 @@ export default function WeeklyWeightModal({ isOpen, onClose }) {
                 value={weight}
                 onChange={(e) => setWeight(e.target.value)}
                 placeholder="Ví dụ: 64.5"
-                className="w-full pl-11 pr-14 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 text-lg font-black focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition"
+                className="w-full pl-11 pr-14 py-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-white text-lg font-black focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white dark:focus:bg-slate-800 transition"
               />
               <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-slate-400 font-bold text-sm">
                 kg
               </div>
             </div>
-            <p className="text-[11px] text-slate-400 mt-1.5">
+            <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1.5">
               💡 Lời khuyên: Hãy cân vào buổi sáng sau khi thức dậy và đi vệ sinh để có số đo chuẩn nhất.
             </p>
           </div>
@@ -171,4 +171,3 @@ export default function WeeklyWeightModal({ isOpen, onClose }) {
     </div>
   );
 }
-
