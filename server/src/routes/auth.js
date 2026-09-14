@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { db } = require('../db');
 const { authenticateToken, JWT_SECRET } = require('../middleware/auth');
-const { computeFullProfileStats } = require('../utils/calculator');
+const { computeFullProfileStats, checkNeedsWeeklyWeightUpdate } = require('../utils/calculator');
 
 const router = express.Router();
 
@@ -61,11 +61,11 @@ router.post('/register', async (req, res) => {
     );
     const userId = userResult.lastID;
 
-    // Insert health profile
+    // Insert health profile with initial last_weight_updated_at
     await db.runAsync(
       `INSERT INTO health_profiles 
-       (user_id, gender, age, height, weight, target_weight, activity_level, goal, custom_calorie_target) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       (user_id, gender, age, height, weight, target_weight, activity_level, goal, custom_calorie_target, last_weight_updated_at) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)`,
       [
         userId,
         gender,
@@ -77,6 +77,13 @@ router.post('/register', async (req, res) => {
         goal,
         custom_calorie_target ? parseFloat(custom_calorie_target) : null,
       ]
+    );
+
+    // Log initial weight into weight_history
+    const today = new Date().toISOString().split('T')[0];
+    await db.runAsync(
+      'INSERT INTO weight_history (user_id, weight, date) VALUES (?, ?, ?)',
+      [userId, parseFloat(weight) || 65, today]
     );
 
     // Fetch newly created profile
@@ -94,6 +101,7 @@ router.post('/register', async (req, res) => {
       },
       profile,
       computedStats,
+      needsWeeklyWeightUpdate: false,
     });
   } catch (error) {
     console.error('Registration error:', error);
@@ -132,6 +140,7 @@ router.post('/login', async (req, res) => {
     }
 
     const computedStats = computeFullProfileStats(profile);
+    const needsWeeklyWeightUpdate = checkNeedsWeeklyWeightUpdate(profile.last_weight_updated_at);
     const token = generateToken(user.id);
 
     return res.json({
@@ -144,6 +153,7 @@ router.post('/login', async (req, res) => {
       },
       profile,
       computedStats,
+      needsWeeklyWeightUpdate,
     });
   } catch (error) {
     console.error('Login error:', error);
@@ -156,11 +166,13 @@ router.get('/me', authenticateToken, async (req, res) => {
   try {
     const profile = await db.getAsync('SELECT * FROM health_profiles WHERE user_id = ?', [req.user.id]);
     const computedStats = profile ? computeFullProfileStats(profile) : null;
+    const needsWeeklyWeightUpdate = profile ? checkNeedsWeeklyWeightUpdate(profile.last_weight_updated_at) : false;
 
     return res.json({
       user: req.user,
       profile,
       computedStats,
+      needsWeeklyWeightUpdate,
     });
   } catch (error) {
     console.error('Auth check error:', error);

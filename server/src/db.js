@@ -59,7 +59,27 @@ async function initDB() {
       activity_level TEXT NOT NULL DEFAULT 'moderate',
       goal TEXT NOT NULL DEFAULT 'maintain',
       custom_calorie_target REAL DEFAULT NULL,
+      last_weight_updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  // Migration: add last_weight_updated_at column if not exists in older db
+  const columns = await db.allAsync('PRAGMA table_info(health_profiles)');
+  const hasCol = columns.some((c) => c.name === 'last_weight_updated_at');
+  if (!hasCol) {
+    await db.runAsync('ALTER TABLE health_profiles ADD COLUMN last_weight_updated_at DATETIME');
+    await db.runAsync('UPDATE health_profiles SET last_weight_updated_at = CURRENT_TIMESTAMP WHERE last_weight_updated_at IS NULL');
+  }
+
+  // Weight history table for weekly tracking
+  await db.runAsync(`
+    CREATE TABLE IF NOT EXISTS weight_history (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      weight REAL NOT NULL,
+      date TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
 

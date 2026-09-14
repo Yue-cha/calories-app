@@ -1,0 +1,16 @@
+{
+  "name": "calories-app",
+  "version": "1.0.0",
+  "description": "Calories and Health Tracker Application",
+  "scripts": {
+    "dev": "node dev.js",
+    "server": "cd server && npm start",
+    "client": "cd client && npm run dev",
+    "test": "cd server && node test_e2e.js",
+    "build": "cd client && npm run build"
+  },
+  "keywords": ["calories", "nutrition", "health", "bmr", "tdee", "tracker"],
+  "author": "",
+  "license": "ISC"
+}
+

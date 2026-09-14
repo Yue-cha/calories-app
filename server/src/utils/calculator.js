@@ -111,6 +111,28 @@ function computeFullProfileStats(profile) {
   };
 }
 
+/**
+ * Returns Monday 00:00:00.000 of the week containing refDate
+ */
+function getMondayOfCurrentWeek(refDate = new Date()) {
+  const d = new Date(refDate);
+  const day = d.getDay(); // 0 is Sunday, 1 is Monday ... 6 is Saturday
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  const monday = new Date(d.setDate(diff));
+  monday.setHours(0, 0, 0, 0);
+  return monday;
+}
+
+/**
+ * Checks if the user needs to update weight for the current week (after Monday 00:00)
+ */
+function checkNeedsWeeklyWeightUpdate(lastWeightUpdatedAt, now = new Date()) {
+  if (!lastWeightUpdatedAt) return true;
+  const lastDate = new Date(lastWeightUpdatedAt);
+  const currentMonday = getMondayOfCurrentWeek(now);
+  return lastDate.getTime() < currentMonday.getTime();
+}
+
 module.exports = {
   calculateBMR,
   calculateTDEE,
@@ -119,6 +141,8 @@ module.exports = {
   calculateMacros,
   calculateRecommendedWater,
   computeFullProfileStats,
+  getMondayOfCurrentWeek,
+  checkNeedsWeeklyWeightUpdate,
   ACTIVITY_MULTIPLIERS,
   GOAL_ADJUSTMENTS,
 };
