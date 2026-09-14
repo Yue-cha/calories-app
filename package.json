@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "Calories and Health Tracker Application",
   "scripts": {
+    "start": "node server/src/index.js",
+    "build": "npm --prefix client install && npm --prefix client run build && npm --prefix server install",
     "dev": "node dev.js",
     "server": "cd server && npm start",
     "client": "cd client && npm run dev",
-    "test": "cd server && node test_e2e.js",
-    "build": "cd client && npm run build"
+    "test": "cd server && node test_e2e.js"
   },
   "keywords": ["calories", "nutrition", "health", "bmr", "tdee", "tracker"],
   "author": "",

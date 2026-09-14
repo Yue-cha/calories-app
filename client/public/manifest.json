@@ -1,0 +1,18 @@
+{
+  "short_name": "CaloTrack",
+  "name": "CaloTrack Pro - Quản lý Calo & Dinh Dưỡng",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#090d16",
+  "theme_color": "#10b981",
+  "display": "standalone",
+  "orientation": "portrait"
+}
+
