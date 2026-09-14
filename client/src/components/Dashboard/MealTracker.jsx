@@ -13,6 +13,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
+import AiMealSuggesterModal from './AiMealSuggesterModal';
 
 const MEAL_TYPES = [
   { key: 'breakfast', label: 'Bữa Sáng', icon: Coffee, color: 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-900/50' },
@@ -21,10 +22,17 @@ const MEAL_TYPES = [
   { key: 'snack', label: 'Bữa Phụ / Ăn Vặt', icon: Cookie, color: 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-900/50' },
 ];
 
-export default function MealTracker({ date, groupedMeals, onMealChanged }) {
+export default function MealTracker({ date, groupedMeals, remainingCalories, onMealChanged }) {
   const [activeFormType, setActiveFormType] = useState('breakfast');
   const [showAddForm, setShowAddForm] = useState(false);
   const [loadingAdd, setLoadingAdd] = useState(false);
+
+  // AI Meal Suggester modal state
+  const [aiModalConfig, setAiModalConfig] = useState({
+    isOpen: false,
+    mealType: 'lunch',
+    mealLabel: 'Bữa Trưa',
+  });
 
   // Manual entry form state
   const [mealForm, setMealForm] = useState({
@@ -359,18 +367,37 @@ export default function MealTracker({ date, groupedMeals, onMealChanged }) {
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-3">
-                  <div className="text-right">
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                  <div className="text-right mr-1">
                     <span className="text-xs font-black text-slate-800 dark:text-white">{Math.round(totalCal)}</span>
                     <span className="text-[10px] text-slate-400 dark:text-slate-500 ml-1">kcal</span>
                   </div>
+
+                  {/* Nút AI Gợi Ý Món Ăn Cho Bữa Này */}
+                  <button
+                    onClick={() =>
+                      setAiModalConfig({
+                        isOpen: true,
+                        mealType: type.key,
+                        mealLabel: type.label,
+                      })
+                    }
+                    title={`Hỏi AI gợi ý món ăn dinh dưỡng cho ${type.label}`}
+                    className="flex items-center space-x-1 px-2.5 sm:px-3 py-1.5 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/60 dark:to-teal-950/60 hover:from-emerald-100 hover:to-teal-100 dark:hover:from-emerald-900/60 dark:hover:to-teal-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 rounded-xl text-xs font-bold transition shadow-2xs cursor-pointer group"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-amber-500 group-hover:scale-110 transition-transform" />
+                    <span className="hidden sm:inline">AI Gợi Ý</span>
+                    <span className="sm:hidden">AI</span>
+                  </button>
+
+                  {/* Nút Thêm Món Thủ Công */}
                   <button
                     onClick={() => {
                       setActiveFormType(type.key);
                       setShowAddForm(true);
                       window.scrollTo({ top: 200, behavior: 'smooth' });
                     }}
-                    title="Thêm món vào bữa này"
+                    title="Thêm món thủ công vào bữa này"
                     className="p-1.5 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 rounded-xl transition cursor-pointer"
                   >
                     <Plus className="w-4 h-4" />
@@ -380,8 +407,21 @@ export default function MealTracker({ date, groupedMeals, onMealChanged }) {
 
               {/* Meal Items */}
               {meals.length === 0 ? (
-                <div className="py-6 text-center text-slate-400 dark:text-slate-500 text-xs">
-                  Chưa có món ăn nào trong {type.label.toLowerCase()}.
+                <div className="py-6 text-center text-slate-400 dark:text-slate-500 text-xs flex flex-col items-center justify-center space-y-2">
+                  <span>Chưa có món ăn nào trong {type.label.toLowerCase()}.</span>
+                  <button
+                    onClick={() =>
+                      setAiModalConfig({
+                        isOpen: true,
+                        mealType: type.key,
+                        mealLabel: type.label,
+                      })
+                    }
+                    className="inline-flex items-center space-x-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100/80 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/50 rounded-xl text-xs font-bold transition cursor-pointer"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                    <span>Hỏi AI gợi ý món cho {type.label}</span>
+                  </button>
                 </div>
               ) : (
                 <div className="divide-y divide-slate-100 dark:divide-slate-800/80 mt-2">
@@ -423,6 +463,17 @@ export default function MealTracker({ date, groupedMeals, onMealChanged }) {
           );
         })}
       </div>
+
+      {/* AI Meal Suggester Modal */}
+      <AiMealSuggesterModal
+        isOpen={aiModalConfig.isOpen}
+        onClose={() => setAiModalConfig((prev) => ({ ...prev, isOpen: false }))}
+        mealType={aiModalConfig.mealType}
+        mealLabel={aiModalConfig.mealLabel}
+        date={date}
+        remainingCalories={remainingCalories}
+        onMealAdded={onMealChanged}
+      />
     </div>
   );
 }

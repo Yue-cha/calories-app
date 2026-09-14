@@ -6,6 +6,7 @@ import AuthModal from './components/Auth/AuthModal';
 import CalorieOverview from './components/Dashboard/CalorieOverview';
 import MealTracker from './components/Dashboard/MealTracker';
 import HealthMetricsTab from './components/Calculator/HealthMetricsTab';
+import WeeklyWeightChart from './components/WeightTracker/WeeklyWeightChart';
 import ProfileModal from './components/Profile/ProfileModal';
 import WeeklyWeightModal from './components/Profile/WeeklyWeightModal';
 import { Flame, Sparkles, Moon, Scale, X, CheckCircle2 } from 'lucide-react';
@@ -13,7 +14,7 @@ import { Flame, Sparkles, Moon, Scale, X, CheckCircle2 } from 'lucide-react';
 export default function App() {
   const { isAuthenticated, loading, computedStats, needsWeeklyWeightUpdate, refreshProfile } = useAuth();
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split('T')[0]);
-  const [activeTab, setActiveTab] = useState('tracker'); // 'tracker' | 'calculator'
+  const [activeTab, setActiveTab] = useState('tracker'); // 'tracker' | 'calculator' | 'weight'
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [showWeeklyWeightModal, setShowWeeklyWeightModal] = useState(false);
   const [midnightAlert, setMidnightAlert] = useState(null);
@@ -159,7 +160,7 @@ export default function App() {
 
       {/* Main Container */}
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {activeTab === 'tracker' ? (
+        {activeTab === 'tracker' && (
           <>
             {/* Feature 2: Calorie Overview & Remaining Calculation */}
             <CalorieOverview
@@ -171,10 +172,18 @@ export default function App() {
             <MealTracker
               date={selectedDate}
               groupedMeals={mealsData.grouped}
+              remainingCalories={mealsData.summary?.remainingCalories}
               onMealChanged={() => fetchMeals(selectedDate)}
             />
           </>
-        ) : (
+        )}
+
+        {activeTab === 'weight' && (
+          /* Weekly Weight Comparison & Bar Chart */
+          <WeeklyWeightChart />
+        )}
+
+        {activeTab === 'calculator' && (
           /* Feature 1: Body Metrics & Scientific Calorie Calculator */
           <HealthMetricsTab />
         )}

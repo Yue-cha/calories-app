@@ -83,6 +83,27 @@ export const api = {
     return data;
   },
 
+  async addWeightEntry(weightData) {
+    const res = await fetch(`${API_BASE}/profile/weight-history`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(weightData),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Không thể lưu cân nặng');
+    return data;
+  },
+
+  async deleteWeightEntry(id) {
+    const res = await fetch(`${API_BASE}/profile/weight-history/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Không thể xóa bản ghi cân nặng');
+    return data;
+  },
+
   async simulateMetrics(simulationData) {
     const res = await fetch(`${API_BASE}/profile/simulate`, {
       method: 'POST',
@@ -133,6 +154,18 @@ export const api = {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Không thể tải gợi ý món ăn');
+    return data;
+  },
+
+  // AI Meal Suggestions
+  async getAiMealSuggestions(params) {
+    const res = await fetch(`${API_BASE}/ai/suggest-meals`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(params),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Không thể lấy gợi ý món ăn từ AI');
     return data;
   },
 };
