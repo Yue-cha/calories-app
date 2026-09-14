@@ -7,6 +7,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [computedStats, setComputedStats] = useState(null);
+  const [needsWeeklyWeightUpdate, setNeedsWeeklyWeightUpdate] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const checkAuth = useCallback(async () => {
@@ -21,12 +22,14 @@ export function AuthProvider({ children }) {
       setUser(data.user);
       setProfile(data.profile);
       setComputedStats(data.computedStats);
+      setNeedsWeeklyWeightUpdate(!!data.needsWeeklyWeightUpdate);
     } catch (err) {
       console.warn('Session expired or invalid:', err);
       localStorage.removeItem('calo_token');
       setUser(null);
       setProfile(null);
       setComputedStats(null);
+      setNeedsWeeklyWeightUpdate(false);
     } finally {
       setLoading(false);
     }
@@ -42,6 +45,7 @@ export function AuthProvider({ children }) {
     setUser(data.user);
     setProfile(data.profile);
     setComputedStats(data.computedStats);
+    setNeedsWeeklyWeightUpdate(!!data.needsWeeklyWeightUpdate);
     return data;
   };
 
@@ -51,6 +55,7 @@ export function AuthProvider({ children }) {
     setUser(data.user);
     setProfile(data.profile);
     setComputedStats(data.computedStats);
+    setNeedsWeeklyWeightUpdate(false);
     return data;
   };
 
@@ -59,6 +64,7 @@ export function AuthProvider({ children }) {
     setUser(null);
     setProfile(null);
     setComputedStats(null);
+    setNeedsWeeklyWeightUpdate(false);
   };
 
   const refreshProfile = async () => {
@@ -66,9 +72,18 @@ export function AuthProvider({ children }) {
       const data = await api.getProfile();
       setProfile(data.profile);
       setComputedStats(data.computedStats);
+      setNeedsWeeklyWeightUpdate(!!data.needsWeeklyWeightUpdate);
     } catch (err) {
       console.error('Failed to refresh profile:', err);
     }
+  };
+
+  const submitWeeklyWeight = async (weight) => {
+    const data = await api.updateWeeklyWeight(weight);
+    setProfile(data.profile);
+    setComputedStats(data.computedStats);
+    setNeedsWeeklyWeightUpdate(false);
+    return data;
   };
 
   return (
@@ -77,12 +92,14 @@ export function AuthProvider({ children }) {
         user,
         profile,
         computedStats,
+        needsWeeklyWeightUpdate,
         loading,
         isAuthenticated: !!user,
         login,
         register,
         logout,
         refreshProfile,
+        submitWeeklyWeight,
       }}
     >
       {children}
@@ -97,4 +114,3 @@ export function useAuth() {
   }
   return context;
 }
-
